@@ -1,0 +1,3 @@
+db_name: labdb
+db_user: labuser
+db_password: ChangeMe123   # в реальности хранить в Ansible Vault

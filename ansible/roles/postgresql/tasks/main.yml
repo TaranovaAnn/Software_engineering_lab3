@@ -1,0 +1,23 @@
+---
+- name: Установка PostgreSQL и зависимостей
+  apt: { name: [postgresql, python3-psycopg2, acl, sudo], state: present, update_cache: yes }
+- name: PostgreSQL запущен
+  service: { name: postgresql, state: started, enabled: yes, use: service }
+- name: Создание БД
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_db: { name: "{{ db_name }}" }
+- name: Создание пользователя
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+- name: Выдача прав на БД
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_privs:
+    db: "{{ db_name }}"
+    roles: "{{ db_user }}"
+    type: database
+    privs: ALL

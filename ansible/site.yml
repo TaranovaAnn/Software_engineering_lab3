@@ -1,0 +1,20 @@
+---
+- name: Подготовка узлов (Python для Ansible)
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Установка python3
+      raw: test -x /usr/bin/python3 || (apt-get update && apt-get install -y python3)
+      changed_when: false
+
+- name: Настройка Web-сервера
+  hosts: webservers
+  roles: [nginx]
+
+- name: Настройка App-сервера
+  hosts: appservers
+  roles: [app]
+
+- name: Настройка сервера БД
+  hosts: dbservers
+  roles: [postgresql]

@@ -1,0 +1,10 @@
+---
+- name: Установка Gunicorn
+  apt: { name: [python3, gunicorn], state: present, update_cache: yes }
+- name: Каталог приложения
+  file: { path: /opt/app, state: directory }
+- name: Копирование приложения
+  copy: { src: app.py, dest: /opt/app/app.py }
+- name: Запуск Gunicorn
+  command: gunicorn --daemon --pid /run/gunicorn.pid --chdir /opt/app -b 0.0.0.0:8000 app:app
+  args: { creates: /run/gunicorn.pid }
